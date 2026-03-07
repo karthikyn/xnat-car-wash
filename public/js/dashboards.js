@@ -252,22 +252,30 @@ function renderSentimentAnalysis(feedbackBookings) {
     const total = feedbackBookings.length;
     
     const chartHTML = `
-        <div style="text-align: center;">
-            <div style="display: flex; height: 200px; align-items: flex-end; justify-content: space-around; margin-bottom: 20px;">
-                <div style="text-align: center;">
-                    <div style="background: #4caf50; width: 80px; height: ${positive/total*180}px; border-radius: 8px 8px 0 0;"></div>
-                    <div style="margin-top: 10px; font-weight: 600;">Positive</div>
-                    <div style="font-size: 20px; font-weight: 700; color: #4caf50;">${positive}</div>
+        <div style="text-align: center; padding: 20px 0;">
+            <div style="display: flex; height: 220px; align-items: flex-end; justify-content: space-around; margin-bottom: 10px;">
+                <div style="text-align: center; display: flex; flex-direction: column; align-items: center;">
+                    <div style="background: #4caf50; width: 80px; height: ${total > 0 ? (positive/total*180) : 0}px; border-radius: 8px 8px 0 0; min-height: 20px;"></div>
                 </div>
-                <div style="text-align: center;">
-                    <div style="background: #ff9800; width: 80px; height: ${neutral/total*180}px; border-radius: 8px 8px 0 0;"></div>
-                    <div style="margin-top: 10px; font-weight: 600;">Neutral</div>
-                    <div style="font-size: 20px; font-weight: 700; color: #ff9800;">${neutral}</div>
+                <div style="text-align: center; display: flex; flex-direction: column; align-items: center;">
+                    <div style="background: #ff9800; width: 80px; height: ${total > 0 ? (neutral/total*180) : 0}px; border-radius: 8px 8px 0 0; min-height: 20px;"></div>
                 </div>
-                <div style="text-align: center;">
-                    <div style="background: #f44336; width: 80px; height: ${negative/total*180}px; border-radius: 8px 8px 0 0;"></div>
-                    <div style="margin-top: 10px; font-weight: 600;">Negative</div>
-                    <div style="font-size: 20px; font-weight: 700; color: #f44336;">${negative}</div>
+                <div style="text-align: center; display: flex; flex-direction: column; align-items: center;">
+                    <div style="background: #f44336; width: 80px; height: ${total > 0 ? (negative/total*180) : 0}px; border-radius: 8px 8px 0 0; min-height: 20px;"></div>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-around; margin-top: 15px;">
+                <div style="text-align: center; width: 80px;">
+                    <div style="font-weight: 600; font-size: 14px; margin-bottom: 5px;">Positive</div>
+                    <div style="font-size: 24px; font-weight: 700; color: #4caf50;">${positive}</div>
+                </div>
+                <div style="text-align: center; width: 80px;">
+                    <div style="font-weight: 600; font-size: 14px; margin-bottom: 5px;">Neutral</div>
+                    <div style="font-size: 24px; font-weight: 700; color: #ff9800;">${neutral}</div>
+                </div>
+                <div style="text-align: center; width: 80px;">
+                    <div style="font-weight: 600; font-size: 14px; margin-bottom: 5px;">Negative</div>
+                    <div style="font-size: 24px; font-weight: 700; color: #f44336;">${negative}</div>
                 </div>
             </div>
         </div>

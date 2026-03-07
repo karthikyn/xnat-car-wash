@@ -94,9 +94,20 @@ See [docs/BRANDING.md](docs/BRANDING.md) for complete brand guidelines.
 
 ## 📖 Documentation
 
-- [Project Structure](PROJECT_STRUCTURE.md) - Detailed folder organization
-- [Brand Guidelines](docs/BRANDING.md) - Colors, typography, logo usage
-- [Features](docs/FEATURES.md) - Complete feature list and roadmap
+All documentation has been organized in the `/docs` folder:
+
+- **[Documentation Index](docs/INDEX.md)** - Complete documentation overview
+- **[Quick Start Guide](docs/QUICK_START.md)** - Fast setup for developers
+- **[Deployment Guide](docs/DEPLOYMENT_GUIDE.md)** - Production deployment
+- **[Project Structure](docs/PROJECT_STRUCTURE.md)** - Folder organization
+- **[UI Redesign](docs/COMPLETE_UI_REDESIGN.md)** - Material Design 3 details
+- **[Testing Checklist](docs/TESTING_CHECKLIST.md)** - QA and testing
+
+### Quick Links
+- 🚀 [Getting Started](docs/QUICK_START.md)
+- 🐛 [Bug Fixes](docs/FIXES_APPLIED.md)
+- 🎨 [Design Docs](docs/COMPLETE_UI_REDESIGN.md)
+- ✅ [Testing](docs/TESTING_CHECKLIST.md)
 
 ## 🔧 Configuration
 
