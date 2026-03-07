@@ -206,12 +206,14 @@ main {
     background: var(--md-surface);
     border-radius: var(--md-radius-md);
     box-shadow: var(--md-shadow-2);
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: visible;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    min-width: 1200px;
 }
 
 thead {
@@ -226,6 +228,26 @@ th {
     color: var(--md-on-surface-variant);
     border-bottom: 1px solid var(--md-outline-variant);
     letter-spacing: 0.1px;
+    white-space: nowrap;
+}
+
+/* Sticky Actions Column */
+th:last-child,
+td:last-child {
+    position: sticky;
+    right: 0;
+    background: var(--md-surface);
+    box-shadow: -2px 0 4px rgba(0, 0, 0, 0.05);
+    z-index: 10;
+}
+
+thead th:last-child {
+    background: var(--md-surface-container);
+    z-index: 11;
+}
+
+tbody tr:hover td:last-child {
+    background: var(--md-surface-container);
 }
 
 td {
@@ -233,6 +255,7 @@ td {
     border-bottom: 1px solid var(--md-outline-variant);
     color: var(--md-on-surface);
     font-size: 14px;
+    white-space: nowrap;
 }
 
 tbody tr {
@@ -342,6 +365,7 @@ tbody tr:hover {
     display: flex;
     gap: 8px;
     flex-wrap: nowrap;
+    min-width: 280px;
 }
 
 .loading {
