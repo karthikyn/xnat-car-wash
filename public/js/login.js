@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:3000/api';
+// Use relative URL for API calls - works in both development and production
+const API_URL = window.location.origin + '/api';
 
 function switchTab(tab) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -18,8 +19,13 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
+    const errorEl = document.getElementById('loginError');
     
     console.log('Attempting login for:', email);
+    console.log('API URL:', API_URL);
+    
+    // Hide previous errors
+    errorEl.style.display = 'none';
     
     try {
         const response = await fetch(`${API_URL}/auth/login`, {
@@ -33,7 +39,6 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         console.log('Response data:', data);
         
         if (!response.ok) {
-            const errorEl = document.getElementById('loginError');
             errorEl.textContent = data.error || 'Login failed';
             errorEl.style.display = 'block';
             return;
@@ -48,7 +53,8 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         }
     } catch (error) {
         console.error('Login error:', error);
-        document.getElementById('loginError').textContent = 'Login failed. Please check if server is running.';
+        errorEl.textContent = 'Connection error. Please check your internet connection and try again.';
+        errorEl.style.display = 'block';
     }
 });
 
@@ -59,6 +65,12 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     const email = document.getElementById('registerEmail').value;
     const phone = document.getElementById('registerPhone').value;
     const password = document.getElementById('registerPassword').value;
+    const errorEl = document.getElementById('registerError');
+    
+    console.log('Attempting registration for:', email);
+    
+    // Hide previous errors
+    errorEl.style.display = 'none';
     
     try {
         const response = await fetch(`${API_URL}/auth/register`, {
@@ -70,7 +82,6 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
         const data = await response.json();
         
         if (!response.ok) {
-            const errorEl = document.getElementById('registerError');
             errorEl.textContent = data.error;
             errorEl.style.display = 'block';
             return;
@@ -79,6 +90,8 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
         localStorage.setItem('user', JSON.stringify(data.user));
         window.location.href = '/';
     } catch (error) {
-        document.getElementById('registerError').textContent = 'Registration failed. Please try again.';
+        console.error('Registration error:', error);
+        errorEl.textContent = 'Connection error. Please check your internet connection and try again.';
+        errorEl.style.display = 'block';
     }
 });
