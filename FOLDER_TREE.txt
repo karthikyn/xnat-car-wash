@@ -1,0 +1,79 @@
+xNAT Car Wash Services - Project Structure
+==========================================
+
+Root/
+│
+├── 📂 public/                          # Client-side files (served by Express)
+│   │
+│   ├── 📂 assets/                     # Static assets
+│   │   └── 📂 images/                # Images, logos, icons
+│   │       ├── logo.svg              # Main xNAT logo
+│   │       └── favicon.svg           # Browser tab icon
+│   │
+│   ├── 📂 css/                        # Stylesheets
+│   │   ├── theme.css                 # Global theme & variables
+│   │   ├── styles.css                # Customer pages styles
+│   │   └── admin.css                 # Admin dashboard styles
+│   │
+│   ├── 📂 js/                         # Client-side JavaScript
+│   │   ├── app.js                    # Customer booking logic
+│   │   ├── admin.js                  # Admin dashboard logic
+│   │   └── login.js                  # Authentication logic
+│   │
+│   └── 📂 pages/                      # HTML pages
+│       ├── index.html                # Customer booking page
+│       ├── login.html                # Login/Register page
+│       └── admin.html                # Admin dashboard
+│
+├── 📂 src/                             # Server-side source code
+│   │
+│   ├── 📂 server/                     # Backend server files
+│   │   ├── server.js                 # Express server & API routes
+│   │   ├── seed-data.js              # Dummy data generator
+│   │   ├── dashboards.js             # Dashboard utilities
+│   │   └── generate-center-data.js   # Center data generator
+│   │
+│   └── 📂 data/                       # Database files (JSON)
+│       ├── users.json                # User accounts
+│       ├── bookings.json             # Booking records
+│       ├── partners.json             # Partner data
+│       └── financial-analysis-2026.json
+│
+├── 📂 docs/                            # Documentation
+│   ├── README.md                     # Original README
+│   ├── BRANDING.md                   # Brand guidelines
+│   ├── FEATURES.md                   # Feature documentation
+│   ├── DASHBOARD-SUMMARY.md          # Dashboard docs
+│   ├── DASHBOARDS-GUIDE.md           # Dashboard guide
+│   ├── MATERIAL-DESIGN-REDESIGN.md   # Design docs
+│   ├── financial-report-indian-tax.md
+│   └── structure.txt                 # Old structure
+│
+├── 📂 node_modules/                    # Dependencies (auto-generated)
+│
+├── 📄 package.json                     # Project configuration
+├── 📄 package-lock.json                # Dependency lock file
+├── 📄 .gitignore                       # Git ignore rules
+├── 📄 README.md                        # Main project README
+├── 📄 PROJECT_STRUCTURE.md             # Detailed structure guide
+├── 📄 QUICK_START.md                   # Quick setup guide
+├── 📄 REORGANIZATION_SUMMARY.md        # Reorganization details
+└── 📄 FOLDER_TREE.txt                  # This file
+
+==========================================
+Total Folders: 7 main directories
+Total Files: 30+ organized files
+Structure Type: Express.js Standard
+==========================================
+
+Quick Access:
+- Start Server: npm start
+- View App: http://localhost:3000
+- Login: http://localhost:3000/login
+- Admin: http://localhost:3000/admin
+
+Documentation:
+- Setup: QUICK_START.md
+- Structure: PROJECT_STRUCTURE.md
+- Features: docs/FEATURES.md
+- Branding: docs/BRANDING.md

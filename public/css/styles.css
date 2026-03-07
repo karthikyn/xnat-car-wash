@@ -1,0 +1,491 @@
+/* Material Design 3 - Main Application Styles */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--md-font-family);
+    background: linear-gradient(135deg, #1976D2 0%, #00897B 100%);
+    min-height: 100vh;
+    padding: 16px;
+    color: var(--md-on-background);
+}
+
+@media (min-width: 768px) {
+    body {
+        padding: 24px;
+    }
+}
+
+.container {
+    max-width: 680px;
+    margin: 0 auto;
+    background: var(--md-surface);
+    border-radius: var(--md-radius-xl);
+    box-shadow: var(--md-shadow-4);
+    overflow: hidden;
+    animation: scaleIn 0.4s var(--md-transition-decelerate);
+}
+
+/* Header - Material Design */
+header {
+    background: linear-gradient(135deg, var(--md-primary) 0%, var(--md-secondary) 100%);
+    color: var(--md-on-primary);
+    padding: 32px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
+}
+
+.logo-container {
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.logo-container img {
+    height: 56px;
+    filter: brightness(0) invert(1);
+    animation: fadeIn 0.6s ease-out;
+}
+
+header h1 {
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: 8px;
+    letter-spacing: 0;
+    position: relative;
+    z-index: 1;
+}
+
+header p {
+    font-size: 14px;
+    opacity: 0.9;
+    font-weight: 400;
+    position: relative;
+    z-index: 1;
+}
+
+@media (min-width: 768px) {
+    header {
+        padding: 48px 32px;
+    }
+    
+    .logo-container img {
+        height: 64px;
+    }
+    
+    header h1 {
+        font-size: 32px;
+    }
+    
+    header p {
+        font-size: 16px;
+    }
+}
+
+/* Main Content */
+main {
+    padding: 24px;
+}
+
+@media (min-width: 768px) {
+    main {
+        padding: 32px;
+    }
+}
+
+/* Form Groups - Material Design */
+.form-group {
+    margin-bottom: 24px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--md-on-surface-variant);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 16px;
+    border: 1px solid var(--md-outline);
+    border-radius: var(--md-radius-xs);
+    font-size: 16px;
+    font-family: var(--md-font-family);
+    background: var(--md-surface);
+    color: var(--md-on-surface);
+    transition: var(--md-transition-standard);
+    outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--md-primary);
+    border-width: 2px;
+    padding: 15px;
+}
+
+input:hover, select:hover, textarea:hover {
+    border-color: var(--md-on-surface);
+}
+
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%231976D2' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 48px;
+    cursor: pointer;
+}
+
+/* Price Display - Material Card */
+.price-display {
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+    padding: 24px;
+    border-radius: var(--md-radius-md);
+    margin-bottom: 24px;
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: var(--md-shadow-1);
+    animation: fadeIn 0.3s ease-out;
+    letter-spacing: 0.5px;
+}
+
+@media (min-width: 768px) {
+    .price-display {
+        font-size: 28px;
+        padding: 28px;
+    }
+}
+
+/* Buttons - Material Design 3 */
+.btn-submit, .btn-new, .btn-feedback {
+    width: 100%;
+    padding: 16px 24px;
+    background: #1a237e;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--md-font-family);
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(26, 35, 126, 0.3);
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+}
+
+.btn-submit::before, .btn-new::before, .btn-feedback::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-submit:hover::before, .btn-new:hover::before, .btn-feedback:hover::before {
+    width: 400px;
+    height: 400px;
+}
+
+.btn-submit:hover, .btn-new:hover, .btn-feedback:hover {
+    background: #283593;
+    box-shadow: 0 6px 16px rgba(26, 35, 126, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-submit:active, .btn-new:active, .btn-feedback:active {
+    box-shadow: 0 2px 8px rgba(26, 35, 126, 0.3);
+    transform: translateY(0);
+}
+
+.btn-feedback {
+    width: auto;
+    padding: 10px 24px;
+    margin-top: 12px;
+    font-size: 13px;
+    background: #2e7d32;
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+.btn-feedback:hover {
+    background: #388e3c;
+    box-shadow: 0 6px 16px rgba(46, 125, 50, 0.4);
+}
+
+@media (min-width: 768px) {
+    .btn-submit, .btn-new {
+        font-size: 15px;
+    }
+}
+
+/* Confirmation Message */
+.confirmation {
+    text-align: center;
+    padding: 32px 24px;
+    animation: scaleIn 0.4s var(--md-transition-decelerate);
+}
+
+.confirmation h2 {
+    color: var(--md-success);
+    margin-bottom: 24px;
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.hidden {
+    display: none;
+}
+
+#bookingDetails {
+    background: var(--md-surface-container);
+    padding: 24px;
+    border-radius: var(--md-radius-md);
+    margin: 24px 0;
+    text-align: left;
+    box-shadow: var(--md-shadow-1);
+}
+
+#bookingDetails p {
+    margin: 12px 0;
+    color: var(--md-on-surface);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+#bookingDetails strong {
+    font-weight: 500;
+    color: var(--md-on-surface-variant);
+}
+
+/* Bookings List */
+.bookings-list {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--md-outline-variant);
+}
+
+.bookings-list h2 {
+    margin-bottom: 20px;
+    color: var(--md-on-surface);
+    font-size: 22px;
+    font-weight: 400;
+}
+
+@media (min-width: 768px) {
+    .bookings-list {
+        margin-top: 48px;
+    }
+    
+    .bookings-list h2 {
+        font-size: 24px;
+        margin-bottom: 24px;
+    }
+}
+
+.booking-item {
+    background: var(--md-surface);
+    padding: 20px;
+    border-radius: var(--md-radius-md);
+    margin-bottom: 16px;
+    border-left: 4px solid var(--md-primary);
+    box-shadow: var(--md-shadow-1);
+    transition: var(--md-transition-standard);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.booking-item:hover {
+    box-shadow: var(--md-shadow-2);
+    transform: translateX(4px);
+}
+
+.booking-item p {
+    margin: 8px 0;
+    color: var(--md-on-surface-variant);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.booking-item strong {
+    color: var(--md-on-surface);
+    font-weight: 500;
+}
+
+@media (min-width: 768px) {
+    .booking-item {
+        padding: 24px;
+    }
+    
+    .booking-item p {
+        font-size: 15px;
+    }
+}
+
+.no-bookings {
+    text-align: center;
+    color: var(--md-on-surface-variant);
+    padding: 32px;
+    font-size: 14px;
+}
+
+/* Status Badges - Material Chips */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: var(--md-radius-sm);
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pending {
+    background: var(--md-warning-container);
+    color: var(--md-on-warning);
+}
+
+.status-in-progress {
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+}
+
+.status-completed {
+    background: var(--md-success-container);
+    color: var(--md-on-success);
+}
+
+.status-cancelled {
+    background: var(--md-error-container);
+    color: var(--md-on-error-container);
+}
+
+/* Feedback Section */
+.feedback-text {
+    margin-top: 12px;
+    padding: 16px;
+    background: var(--md-secondary-container);
+    color: var(--md-on-secondary-container);
+    border-radius: var(--md-radius-sm);
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.6;
+}
+
+/* Modal - Material Design */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: var(--md-surface);
+    padding: 24px;
+    border-radius: var(--md-radius-xl);
+    max-width: 500px;
+    width: 100%;
+    box-shadow: var(--md-shadow-5);
+    animation: scaleIn 0.3s var(--md-transition-decelerate);
+}
+
+.modal-content h2 {
+    margin-bottom: 24px;
+    color: var(--md-on-surface);
+    font-size: 24px;
+    font-weight: 400;
+}
+
+@media (min-width: 768px) {
+    .modal-content {
+        padding: 32px;
+    }
+}
+
+.btn-cancel {
+    padding: 10px 24px;
+    background: var(--md-surface-container-highest);
+    color: var(--md-on-surface);
+    border: none;
+    border-radius: var(--md-radius-xl);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    font-family: var(--md-font-family);
+    letter-spacing: 0.1px;
+    text-transform: uppercase;
+    transition: var(--md-transition-standard);
+}
+
+.btn-cancel:hover {
+    background: var(--md-surface-container-high);
+}
+
+/* Loading State */
+.loading {
+    text-align: center;
+    padding: 32px;
+    color: var(--md-on-surface-variant);
+    font-size: 14px;
+}
+
+.loading::after {
+    content: '...';
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+    .container {
+        border-radius: 0;
+        min-height: 100vh;
+    }
+    
+    body {
+        padding: 0;
+    }
+}

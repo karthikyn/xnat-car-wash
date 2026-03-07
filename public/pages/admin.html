@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - xNAT Car Wash Services</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <div class="logo-container">
+                <img src="/assets/images/logo.svg" alt="xNAT Car Wash Services" style="height:50px;filter:brightness(0) invert(1);">
+            </div>
+            <h1>xNAT Admin Dashboard</h1>
+            <p style="margin-bottom: 20px;">Welcome, <span id="adminName"></span>! | <a href="/dashboards" style="color:white;text-decoration:underline;">📊 Analytics Dashboards</a> | <button onclick="logout()" style="background:none;border:none;color:white;text-decoration:underline;cursor:pointer;">Logout</button></p>
+            <div class="stats">
+                <div class="stat-card">
+                    <h3 id="totalBookings">0</h3>
+                    <p>Total Bookings</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="pendingBookings">0</h3>
+                    <p>Pending</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="inProgressBookings">0</h3>
+                    <p>In Progress</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="completedBookings">0</h3>
+                    <p>Completed</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalRevenue">₹0</h3>
+                    <p>Total Revenue</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="avgRating">0</h3>
+                    <p>Avg Rating</p>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="filters">
+                <select id="statusFilter">
+                    <option value="all">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+                <input type="date" id="dateFilter" placeholder="Filter by date">
+                <input type="text" id="searchFilter" placeholder="Search customer, car, phone...">
+                <button onclick="clearFilters()" class="btn-clear">Clear Filters</button>
+                <button onclick="exportData()" class="btn-export" style="background:#4caf50;color:white;padding:10px 20px;border:none;border-radius:6px;cursor:pointer;font-weight:600;">Export CSV</button>
+            </div>
+
+            <div class="insights" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-bottom:30px;">
+                <div style="background:white;padding:20px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                    <h3 style="margin-bottom:15px;color:#333;">Popular Services</h3>
+                    <div id="popularServices"></div>
+                </div>
+                <div style="background:white;padding:20px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                    <h3 style="margin-bottom:15px;color:#333;">Recent Feedback</h3>
+                    <div id="recentFeedback"></div>
+                </div>
+            </div>
+            
+            <section class="partners-section" style="margin-bottom:30px;">
+                <h2 style="margin-bottom:20px;color:#333;">Partner Management</h2>
+                <div class="partners-grid" id="partnersGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-bottom:20px;"></div>
+                <button onclick="distributeProfit()" class="btn-distribute" style="background:linear-gradient(135deg, #1a237e 0%, #283593 100%);color:white;padding:14px 32px;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:16px;box-shadow:0 4px 12px rgba(26,35,126,0.3);transition:all 0.3s;text-transform:uppercase;letter-spacing:0.5px;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 16px rgba(26,35,126,0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(26,35,126,0.3)'">💰 Distribute Profit to All Partners</button>
+            </section>
+
+            <div class="bookings-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Customer</th>
+                            <th>Phone</th>
+                            <th>Location</th>
+                            <th>Car Model</th>
+                            <th>Service</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Feedback</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsTableBody">
+                        <tr>
+                            <td colspan="12" class="loading">Loading bookings...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Update Booking Status</h2>
+            <div class="modal-body">
+                <p id="modalBookingInfo"></p>
+                <div class="form-group">
+                    <label for="modalStatus">Status</label>
+                    <select id="modalStatus">
+                        <option value="pending">Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="modalTechnician">Technician</label>
+                    <select id="modalTechnician">
+                        <option value="John Smith">John Smith</option>
+                        <option value="Mike Johnson">Mike Johnson</option>
+                        <option value="Sarah Williams">Sarah Williams</option>
+                        <option value="David Brown">David Brown</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button onclick="closeModal()" class="btn-cancel">Cancel</button>
+                <button onclick="updateStatus()" class="btn-save">Update</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="timelineModal" class="modal hidden">
+        <div class="modal-content" style="max-width: 700px;">
+            <h2>Booking Timeline</h2>
+            <div class="modal-body">
+                <div id="timelineContent"></div>
+            </div>
+            <div class="modal-actions">
+                <button onclick="closeTimelineModal()" class="btn-cancel">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/admin.js"></script>
+</body>
+</html>
+
+    <div id="expenseModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Add Expense</h2>
+            <form id="expenseForm" onsubmit="submitExpense(event)">
+                <input type="hidden" id="expensePartnerId">
+                <div class="form-group">
+                    <label for="expenseAmount">Amount (₹)</label>
+                    <input type="number" id="expenseAmount" step="0.01" required style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:6px;font-size:16px;">
+                </div>
+                <div class="form-group">
+                    <label for="expenseDescription">Description</label>
+                    <textarea id="expenseDescription" rows="3" required style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:6px;font-size:16px;font-family:inherit;"></textarea>
+                </div>
+                <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+                    <button type="button" onclick="closeExpenseModal()" class="btn-cancel" style="padding:10px 20px;background:#e0e0e0;color:#333;border:none;border-radius:6px;cursor:pointer;font-weight:600;">Cancel</button>
+                    <button type="submit" class="btn-submit">Add Expense</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="paymentModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Record Payment</h2>
+            <form id="paymentForm" onsubmit="submitPayment(event)">
+                <input type="hidden" id="paymentPartnerId">
+                <div class="form-group">
+                    <label for="paymentAmount">Amount (₹)</label>
+                    <input type="number" id="paymentAmount" step="0.01" required style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:6px;font-size:16px;">
+                </div>
+                <div class="form-group">
+                    <label for="paymentDescription">Description</label>
+                    <textarea id="paymentDescription" rows="3" required style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:6px;font-size:16px;font-family:inherit;"></textarea>
+                </div>
+                <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+                    <button type="button" onclick="closePaymentModal()" class="btn-cancel" style="padding:10px 20px;background:#e0e0e0;color:#333;border:none;border-radius:6px;cursor:pointer;font-weight:600;">Cancel</button>
+                    <button type="submit" class="btn-submit">Record Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="transactionsModal" class="modal hidden">
+        <div class="modal-content" style="max-width:800px;">
+            <h2>Transaction History</h2>
+            <div id="transactionsContent" style="max-height:500px;overflow-y:auto;"></div>
+            <div style="display:flex;justify-content:flex-end;margin-top:20px;">
+                <button onclick="closeTransactionsModal()" class="btn-cancel" style="padding:10px 20px;background:#e0e0e0;color:#333;border:none;border-radius:6px;cursor:pointer;font-weight:600;">Close</button>
+            </div>
+        </div>
+    </div>

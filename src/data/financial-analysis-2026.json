@@ -1,0 +1,125 @@
+{
+  "businessName": "Car Wash Booking Service",
+  "financialYear": "2025-2026",
+  "period": "April 2025 - March 2026",
+  "currency": "INR",
+  "targetBookings": 10000,
+  
+  "serviceTypes": {
+    "basic": {
+      "name": "Basic Wash",
+      "price": 500,
+      "costPerService": 350,
+      "margin": 0.30,
+      "targetPercentage": 0.50
+    },
+    "premium": {
+      "name": "Premium Wash",
+      "price": 1000,
+      "costPerService": 650,
+      "margin": 0.35,
+      "targetPercentage": 0.35
+    },
+    "deluxe": {
+      "name": "Deluxe Detail",
+      "price": 1800,
+      "costPerService": 1080,
+      "margin": 0.40,
+      "targetPercentage": 0.15
+    }
+  },
+  
+  "monthlyBreakdown": [
+    {
+      "month": "April 2025",
+      "basic": 420,
+      "premium": 290,
+      "deluxe": 125,
+      "total": 835
+    },
+    {
+      "month": "May 2025",
+      "basic": 415,
+      "premium": 295,
+      "deluxe": 128,
+      "total": 838
+    },
+    {
+      "month": "June 2025",
+      "basic": 425,
+      "premium": 288,
+      "deluxe": 122,
+      "total": 835
+    },
+    {
+      "month": "July 2025",
+      "basic": 410,
+      "premium": 292,
+      "deluxe": 130,
+      "total": 832
+    },
+    {
+      "month": "August 2025",
+      "basic": 418,
+      "premium": 294,
+      "deluxe": 126,
+      "total": 838
+    },
+    {
+      "month": "September 2025",
+      "basic": 422,
+      "premium": 291,
+      "deluxe": 124,
+      "total": 837
+    },
+    {
+      "month": "October 2025",
+      "basic": 428,
+      "premium": 296,
+      "deluxe": 129,
+      "total": 853
+    },
+    {
+      "month": "November 2025",
+      "basic": 412,
+      "premium": 289,
+      "deluxe": 127,
+      "total": 828
+    },
+    {
+      "month": "December 2025",
+      "basic": 435,
+      "premium": 298,
+      "deluxe": 131,
+      "total": 864
+    },
+    {
+      "month": "January 2026",
+      "basic": 408,
+      "premium": 293,
+      "deluxe": 123,
+      "total": 824
+    },
+    {
+      "month": "February 2026",
+      "basic": 419,
+      "premium": 287,
+      "deluxe": 128,
+      "total": 834
+    },
+    {
+      "month": "March 2026",
+      "basic": 388,
+      "premium": 287,
+      "deluxe": 107,
+      "total": 782
+    }
+  ],
+  
+  "annualSummary": {
+    "totalBookings": 10000,
+    "basicWash": 5000,
+    "premiumWash": 3500,
+    "deluxeDetail": 1500
+  }
+}

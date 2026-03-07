@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboards - xNAT Car Wash Services</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/dashboards.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="logo-container">
+                <img src="/assets/images/logo.svg" alt="xNAT" style="height:40px;">
+                <h2>xNAT Analytics</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#overview" class="nav-link active" onclick="showDashboard('overview', event)">📊 Overview</a></li>
+                <li><a href="#feedback" class="nav-link" onclick="showDashboard('feedback', event)">💬 Customer Feedback</a></li>
+                <li><a href="#service-centers" class="nav-link" onclick="showDashboard('service-centers', event)">🏢 Service Centers</a></li>
+                <li><a href="#financial" class="nav-link" onclick="showDashboard('financial', event)">💰 Financial</a></li>
+                <li><a href="#users" class="nav-link" onclick="showDashboard('users', event)">👥 Users</a></li>
+                <li><a href="#analytics" class="nav-link" onclick="showDashboard('analytics', event)">📈 Analytics</a></li>
+            </ul>
+            <div class="nav-footer">
+                <p><span id="adminName"></span></p>
+                <button onclick="window.location.href='/admin'" class="btn-logout" style="margin-bottom: 10px;">← Back to Admin</button>
+                <button onclick="logout()" class="btn-logout">Logout</button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <!-- Overview Dashboard -->
+            <div id="overview-dashboard" class="dashboard-view active">
+                <header class="dashboard-header">
+                    <h1>Business Overview</h1>
+                    <div class="date-range">
+                        <input type="date" id="overviewStartDate">
+                        <span>to</span>
+                        <input type="date" id="overviewEndDate">
+                        <button onclick="applyDateFilter('overview')">Apply</button>
+                    </div>
+                </header>
+
+                <div class="stats-grid">
+                    <div class="stat-card primary">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-info">
+                            <h3 id="overview-total-bookings">0</h3>
+                            <p>Total Bookings</p>
+                        </div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-info">
+                            <h3 id="overview-revenue">₹0</h3>
+                            <p>Total Revenue</p>
+                        </div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-info">
+                            <h3 id="overview-gross-profit">₹0</h3>
+                            <p>Gross Profit</p>
+                        </div>
+                    </div>
+                    <div class="stat-card info">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-info">
+                            <h3 id="overview-avg-rating">0.0</h3>
+                            <p>Avg Rating</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Service Distribution</h3>
+                        <div id="service-distribution-chart"></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Monthly Revenue Trend</h3>
+                        <div id="revenue-trend-chart"></div>
+                    </div>
+                </div>
+
+                <div class="chart-card full-width">
+                    <h3>Service Center Performance</h3>
+                    <div id="center-performance-chart"></div>
+                </div>
+            </div>
+
+            <!-- Customer Feedback Dashboard -->
+            <div id="feedback-dashboard" class="dashboard-view">
+                <header class="dashboard-header">
+                    <h1>Customer Feedback Analysis</h1>
+                    <div class="filters">
+                        <select id="feedback-rating-filter" onchange="filterFeedback()">
+                            <option value="all">All Ratings</option>
+                            <option value="5">5 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="2">2 Stars</option>
+                            <option value="1">1 Star</option>
+                        </select>
+                        <select id="feedback-center-filter" onchange="filterFeedback()">
+                            <option value="all">All Centers</option>
+                        </select>
+                    </div>
+                </header>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="feedback-total">0</h3>
+                        <p>Total Feedback</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="feedback-avg-rating">0.0</h3>
+                        <p>Average Rating</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="feedback-5-star">0%</h3>
+                        <p>5-Star Reviews</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="feedback-response-rate">0%</h3>
+                        <p>Response Rate</p>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Rating Distribution</h3>
+                        <div id="rating-distribution-chart"></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Sentiment Analysis</h3>
+                        <div id="sentiment-chart"></div>
+                    </div>
+                </div>
+
+                <div class="feedback-list">
+                    <h3>Recent Feedback</h3>
+                    <div id="feedback-items"></div>
+                </div>
+            </div>
+
+            <!-- Service Centers Dashboard -->
+            <div id="service-centers-dashboard" class="dashboard-view">
+                <header class="dashboard-header">
+                    <h1>Service Centers Performance</h1>
+                    <button onclick="exportCenterData()" class="btn-export">Export Report</button>
+                </header>
+
+                <div class="centers-grid" id="centers-grid"></div>
+
+                <div class="chart-card full-width">
+                    <h3>Comparative Analysis</h3>
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="showCenterTab('revenue', event)">Revenue</button>
+                        <button class="tab-btn" onclick="showCenterTab('bookings', event)">Bookings</button>
+                        <button class="tab-btn" onclick="showCenterTab('ratings', event)">Ratings</button>
+                        <button class="tab-btn" onclick="showCenterTab('efficiency', event)">Efficiency</button>
+                    </div>
+                    <div id="center-comparison-chart"></div>
+                </div>
+
+                <div class="recommendations-card">
+                    <h3>🎯 Improvement Recommendations</h3>
+                    <div id="center-recommendations"></div>
+                </div>
+            </div>
+
+            <!-- Financial Dashboard -->
+            <div id="financial-dashboard" class="dashboard-view">
+                <header class="dashboard-header">
+                    <h1>Financial Analytics</h1>
+                    <div class="date-range">
+                        <select id="financial-period">
+                            <option value="month">This Month</option>
+                            <option value="quarter">This Quarter</option>
+                            <option value="year" selected>This Year</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+                </header>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="fin-revenue">₹0</h3>
+                        <p>Total Revenue</p>
+                        <span class="trend positive">+12.5%</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="fin-gross-profit">₹0</h3>
+                        <p>Gross Profit</p>
+                        <span class="trend positive">+8.3%</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="fin-net-profit">₹0</h3>
+                        <p>Net Profit</p>
+                        <span class="trend positive">+5.2%</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="fin-margin">0%</h3>
+                        <p>Profit Margin</p>
+                        <span class="trend negative">-1.2%</span>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Revenue vs Profit</h3>
+                        <div id="revenue-profit-chart"></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Cost Breakdown</h3>
+                        <div id="cost-breakdown-chart"></div>
+                    </div>
+                </div>
+
+                <div class="financial-table">
+                    <h3>Monthly Financial Summary</h3>
+                    <table id="financial-table"></table>
+                </div>
+            </div>
+
+            <!-- Users Dashboard -->
+            <div id="users-dashboard" class="dashboard-view">
+                <header class="dashboard-header">
+                    <h1>User Analytics</h1>
+                    <button onclick="exportUserData()" class="btn-export">Export Users</button>
+                </header>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="users-total">0</h3>
+                        <p>Total Users</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="users-active">0</h3>
+                        <p>Active Users</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="users-new">0</h3>
+                        <p>New This Month</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="users-retention">0%</h3>
+                        <p>Retention Rate</p>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>User Growth</h3>
+                        <div id="user-growth-chart"></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Customer Segments</h3>
+                        <div id="customer-segments-chart"></div>
+                    </div>
+                </div>
+
+                <div class="users-table">
+                    <h3>Top Customers</h3>
+                    <table id="top-customers-table"></table>
+                </div>
+            </div>
+
+            <!-- Analytics Dashboard -->
+            <div id="analytics-dashboard" class="dashboard-view">
+                <header class="dashboard-header">
+                    <h1>Advanced Analytics</h1>
+                </header>
+
+                <div class="analytics-section">
+                    <h3>🎯 Key Performance Indicators</h3>
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <h4>Booking Conversion Rate</h4>
+                            <div class="kpi-value">78.5%</div>
+                            <div class="kpi-trend positive">↑ 3.2%</div>
+                        </div>
+                        <div class="kpi-card">
+                            <h4>Average Booking Value</h4>
+                            <div class="kpi-value">₹870</div>
+                            <div class="kpi-trend positive">↑ 5.1%</div>
+                        </div>
+                        <div class="kpi-card">
+                            <h4>Customer Lifetime Value</h4>
+                            <div class="kpi-value">₹4,350</div>
+                            <div class="kpi-trend positive">↑ 8.7%</div>
+                        </div>
+                        <div class="kpi-card">
+                            <h4>Service Completion Rate</h4>
+                            <div class="kpi-value">92.3%</div>
+                            <div class="kpi-trend negative">↓ 1.5%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Peak Hours Analysis</h3>
+                        <div id="peak-hours-chart"></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Service Type Trends</h3>
+                        <div id="service-trends-chart"></div>
+                    </div>
+                </div>
+
+                <div class="insights-section">
+                    <h3>💡 AI-Powered Insights</h3>
+                    <div id="ai-insights"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/dashboards.js"></script>
+</body>
+</html>

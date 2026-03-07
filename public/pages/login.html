@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - xNAT Car Wash Services</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .login-container {
+            max-width: 480px;
+            margin: 40px auto;
+            padding: 0;
+        }
+        
+        .tabs {
+            display: flex;
+            background: var(--md-surface-container);
+            border-radius: var(--md-radius-xl) var(--md-radius-xl) 0 0;
+            padding: 4px;
+            gap: 4px;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 14px 24px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: var(--md-font-family);
+            color: var(--md-on-surface-variant);
+            transition: var(--md-transition-standard);
+            border-radius: var(--md-radius-md);
+            letter-spacing: 0.1px;
+            text-transform: uppercase;
+            position: relative;
+        }
+        
+        .tab.active {
+            background: var(--md-primary-container);
+            color: var(--md-on-primary-container);
+        }
+        
+        .tab:hover:not(.active) {
+            background: var(--md-surface-container-high);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 32px 24px;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .error {
+            color: var(--md-error);
+            font-size: 12px;
+            margin-top: 12px;
+            text-align: center;
+            padding: 12px;
+            background: var(--md-error-container);
+            border-radius: var(--md-radius-sm);
+            font-weight: 500;
+        }
+        
+        @media (min-width: 768px) {
+            .login-container {
+                margin: 60px auto;
+            }
+            
+            .tab-content {
+                padding: 40px 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container login-container">
+        <header>
+            <div class="logo-container">
+                <img src="/assets/images/logo.svg" alt="xNAT Car Wash Services">
+            </div>
+            <h1 class="md-headline-medium">xNAT Car Wash</h1>
+            <p class="md-body-medium">Login or Register to continue</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('login')">Login</button>
+            <button class="tab" onclick="switchTab('register')">Register</button>
+        </div>
+
+        <div id="loginTab" class="tab-content active">
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn-submit md-button-filled">Login</button>
+                <div id="loginError" class="error" style="display:none;"></div>
+            </form>
+        </div>
+
+        <div id="registerTab" class="tab-content">
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email Address</label>
+                    <input type="email" id="registerEmail" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPhone">Phone Number</label>
+                    <input type="tel" id="registerPhone" placeholder="+91 98765 43210" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" placeholder="Minimum 6 characters" required minlength="6">
+                </div>
+                <button type="submit" class="btn-submit md-button-filled">Create Account</button>
+                <div id="registerError" class="error" style="display:none;"></div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/login.js"></script>
+</body>
+</html>

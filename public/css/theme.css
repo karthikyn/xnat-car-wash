@@ -1,0 +1,496 @@
+/* Material Design 3 Theme - xNAT Car Wash Services */
+:root {
+    /* Primary Colors - Material Blue */
+    --md-primary: #1976D2;
+    --md-primary-dark: #1565C0;
+    --md-primary-light: #42A5F5;
+    --md-primary-container: #E3F2FD;
+    --md-on-primary: #FFFFFF;
+    --md-on-primary-container: #0D47A1;
+    
+    /* Secondary Colors - Material Teal */
+    --md-secondary: #00897B;
+    --md-secondary-dark: #00695C;
+    --md-secondary-light: #4DB6AC;
+    --md-secondary-container: #E0F2F1;
+    --md-on-secondary: #FFFFFF;
+    --md-on-secondary-container: #004D40;
+    
+    /* Tertiary Colors */
+    --md-tertiary: #6200EA;
+    --md-tertiary-container: #EDE7F6;
+    --md-on-tertiary: #FFFFFF;
+    
+    /* Error Colors */
+    --md-error: #D32F2F;
+    --md-error-container: #FFEBEE;
+    --md-on-error: #FFFFFF;
+    --md-on-error-container: #B71C1C;
+    
+    /* Success Colors */
+    --md-success: #388E3C;
+    --md-success-container: #E8F5E9;
+    --md-on-success: #FFFFFF;
+    
+    /* Warning Colors */
+    --md-warning: #F57C00;
+    --md-warning-container: #FFF3E0;
+    --md-on-warning: #FFFFFF;
+    
+    /* Surface Colors */
+    --md-surface: #FFFFFF;
+    --md-surface-variant: #F5F5F5;
+    --md-surface-container: #FAFAFA;
+    --md-surface-container-high: #F0F0F0;
+    --md-surface-container-highest: #E0E0E0;
+    --md-on-surface: #1C1B1F;
+    --md-on-surface-variant: #49454F;
+    
+    /* Background */
+    --md-background: #FEFBFF;
+    --md-on-background: #1C1B1F;
+    
+    /* Outline */
+    --md-outline: #79747E;
+    --md-outline-variant: #CAC4D0;
+    
+    /* Material Shadows */
+    --md-shadow-1: 0 1px 2px 0 rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+    --md-shadow-2: 0 1px 2px 0 rgba(0, 0, 0, 0.3), 0 2px 6px 2px rgba(0, 0, 0, 0.15);
+    --md-shadow-3: 0 4px 8px 3px rgba(0, 0, 0, 0.15), 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+    --md-shadow-4: 0 6px 10px 4px rgba(0, 0, 0, 0.15), 0 2px 3px 0 rgba(0, 0, 0, 0.3);
+    --md-shadow-5: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px 0 rgba(0, 0, 0, 0.3);
+    
+    /* Border Radius - Material Design */
+    --md-radius-xs: 4px;
+    --md-radius-sm: 8px;
+    --md-radius-md: 12px;
+    --md-radius-lg: 16px;
+    --md-radius-xl: 28px;
+    --md-radius-full: 9999px;
+    
+    /* Typography Scale */
+    --md-font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    
+    /* Transitions - Material Motion */
+    --md-transition-standard: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    --md-transition-decelerate: all 0.3s cubic-bezier(0.0, 0.0, 0.2, 1);
+    --md-transition-accelerate: all 0.3s cubic-bezier(0.4, 0.0, 1, 1);
+    
+    /* Spacing Scale */
+    --md-spacing-xs: 4px;
+    --md-spacing-sm: 8px;
+    --md-spacing-md: 16px;
+    --md-spacing-lg: 24px;
+    --md-spacing-xl: 32px;
+    --md-spacing-2xl: 48px;
+}
+
+/* Google Fonts - Roboto */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Custom scrollbar - Material Design */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--md-surface-variant);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--md-primary-light);
+    border-radius: var(--md-radius-full);
+    border: 2px solid var(--md-surface-variant);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--md-primary);
+}
+
+/* Material Design Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.4s var(--md-transition-decelerate);
+}
+
+.slide-in {
+    animation: slideIn 0.4s var(--md-transition-decelerate);
+}
+
+.scale-in {
+    animation: scaleIn 0.3s var(--md-transition-decelerate);
+}
+
+/* Material Design Elevation */
+.elevation-0 { box-shadow: none; }
+.elevation-1 { box-shadow: var(--md-shadow-1); }
+.elevation-2 { box-shadow: var(--md-shadow-2); }
+.elevation-3 { box-shadow: var(--md-shadow-3); }
+.elevation-4 { box-shadow: var(--md-shadow-4); }
+.elevation-5 { box-shadow: var(--md-shadow-5); }
+
+/* Material Button Styles */
+.md-button {
+    font-family: var(--md-font-family);
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.1px;
+    padding: 10px 24px;
+    border: none;
+    border-radius: var(--md-radius-xl);
+    cursor: pointer;
+    transition: var(--md-transition-standard);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    min-height: 40px;
+}
+
+.md-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.md-button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.md-button-filled {
+    background: var(--md-primary);
+    color: var(--md-on-primary);
+    box-shadow: var(--md-shadow-2);
+}
+
+.md-button-filled:hover {
+    background: var(--md-primary-dark);
+    box-shadow: var(--md-shadow-3);
+}
+
+.md-button-filled:active {
+    box-shadow: var(--md-shadow-1);
+}
+
+.md-button-outlined {
+    background: transparent;
+    color: var(--md-primary);
+    border: 1px solid var(--md-outline);
+}
+
+.md-button-outlined:hover {
+    background: var(--md-primary-container);
+}
+
+.md-button-text {
+    background: transparent;
+    color: var(--md-primary);
+    padding: 10px 12px;
+}
+
+.md-button-text:hover {
+    background: var(--md-primary-container);
+}
+
+/* Material Card */
+.md-card {
+    background: var(--md-surface);
+    border-radius: var(--md-radius-md);
+    box-shadow: var(--md-shadow-1);
+    transition: var(--md-transition-standard);
+    overflow: hidden;
+}
+
+.md-card:hover {
+    box-shadow: var(--md-shadow-2);
+}
+
+.md-card-elevated {
+    box-shadow: var(--md-shadow-2);
+}
+
+.md-card-elevated:hover {
+    box-shadow: var(--md-shadow-3);
+}
+
+.md-card-filled {
+    background: var(--md-surface-container-highest);
+    box-shadow: none;
+}
+
+.md-card-outlined {
+    border: 1px solid var(--md-outline-variant);
+    box-shadow: none;
+}
+
+/* Material Chip/Badge */
+.md-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: var(--md-radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    font-family: var(--md-font-family);
+    transition: var(--md-transition-standard);
+}
+
+.md-chip-filled {
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+}
+
+.md-chip-outlined {
+    background: transparent;
+    border: 1px solid var(--md-outline);
+    color: var(--md-on-surface);
+}
+
+/* Material Input Fields */
+.md-text-field {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.md-text-field input,
+.md-text-field select,
+.md-text-field textarea {
+    width: 100%;
+    padding: 16px;
+    border: 1px solid var(--md-outline);
+    border-radius: var(--md-radius-xs);
+    font-size: 16px;
+    font-family: var(--md-font-family);
+    background: var(--md-surface);
+    color: var(--md-on-surface);
+    transition: var(--md-transition-standard);
+    outline: none;
+}
+
+.md-text-field input:focus,
+.md-text-field select:focus,
+.md-text-field textarea:focus {
+    border-color: var(--md-primary);
+    border-width: 2px;
+    padding: 15px;
+}
+
+.md-text-field input:hover,
+.md-text-field select:hover,
+.md-text-field textarea:hover {
+    border-color: var(--md-on-surface);
+}
+
+.md-text-field label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--md-on-surface-variant);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-family: var(--md-font-family);
+}
+
+/* Material Typography */
+.md-headline-large {
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 40px;
+    font-family: var(--md-font-family);
+}
+
+.md-headline-medium {
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 36px;
+    font-family: var(--md-font-family);
+}
+
+.md-headline-small {
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 32px;
+    font-family: var(--md-font-family);
+}
+
+.md-title-large {
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 28px;
+    font-family: var(--md-font-family);
+}
+
+.md-title-medium {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.15px;
+    font-family: var(--md-font-family);
+}
+
+.md-body-large {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+    font-family: var(--md-font-family);
+}
+
+.md-body-medium {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    font-family: var(--md-font-family);
+}
+
+.md-label-large {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0.1px;
+    font-family: var(--md-font-family);
+}
+
+/* Material Divider */
+.md-divider {
+    height: 1px;
+    background: var(--md-outline-variant);
+    border: none;
+    margin: 16px 0;
+}
+
+/* Material Surface Tint */
+.md-surface-tint {
+    position: relative;
+}
+
+.md-surface-tint::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--md-primary);
+    opacity: 0.05;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+/* Ripple Effect */
+.md-ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.md-ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.md-ripple:active::after {
+    width: 300px;
+    height: 300px;
+    transition: 0s;
+}
+
+/* State Layers */
+.md-state-layer {
+    position: relative;
+}
+
+.md-state-layer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 0.2s;
+    border-radius: inherit;
+}
+
+.md-state-layer:hover::before {
+    opacity: 0.08;
+}
+
+.md-state-layer:focus::before {
+    opacity: 0.12;
+}
+
+.md-state-layer:active::before {
+    opacity: 0.12;
+}

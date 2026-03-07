@@ -1,0 +1,87 @@
+[
+  {
+    "id": 1,
+    "name": "Pavi",
+    "profitShare": 50,
+    "expenses": 0,
+    "outstandingDue": 9000,
+    "totalEarnings": 9000,
+    "transactions": [
+      {
+        "id": 1772912175084,
+        "type": "profit",
+        "amount": 9000,
+        "description": "Profit distribution from 6 completed bookings",
+        "date": "2026-03-07T19:36:15.084Z"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Kiruthi",
+    "profitShare": 12.5,
+    "expenses": 0,
+    "outstandingDue": 2250,
+    "totalEarnings": 2250,
+    "transactions": [
+      {
+        "id": 1772912175086,
+        "type": "profit",
+        "amount": 2250,
+        "description": "Profit distribution from 6 completed bookings",
+        "date": "2026-03-07T19:36:15.084Z"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Siva",
+    "profitShare": 12.5,
+    "expenses": 0,
+    "outstandingDue": 2250,
+    "totalEarnings": 2250,
+    "transactions": [
+      {
+        "id": 1772912175087,
+        "type": "profit",
+        "amount": 2250,
+        "description": "Profit distribution from 6 completed bookings",
+        "date": "2026-03-07T19:36:15.084Z"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Bharat",
+    "profitShare": 12.5,
+    "expenses": 0,
+    "outstandingDue": 2250,
+    "totalEarnings": 2250,
+    "transactions": [
+      {
+        "id": 1772912175088,
+        "type": "profit",
+        "amount": 2250,
+        "description": "Profit distribution from 6 completed bookings",
+        "date": "2026-03-07T19:36:15.084Z"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Vasanth",
+    "profitShare": 12.5,
+    "expenses": 0,
+    "outstandingDue": 2250,
+    "totalEarnings": 2250,
+    "transactions": [
+      {
+        "id": 1772912175089,
+        "type": "profit",
+        "amount": 2250,
+        "description": "Profit distribution from 6 completed bookings",
+        "date": "2026-03-07T19:36:15.084Z"
+      }
+    ]
+  }
+]

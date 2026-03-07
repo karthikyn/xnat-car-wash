@@ -1,0 +1,30 @@
+<svg width="200" height="80" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="40" cy="40" r="35" fill="#2563eb" opacity="0.1"/>
+  
+  <!-- Water droplet -->
+  <path d="M40 15 C35 25, 30 30, 30 38 C30 46, 34 50, 40 50 C46 50, 50 46, 50 38 C50 30, 45 25, 40 15 Z" 
+        fill="#2563eb"/>
+  
+  <!-- Sparkle 1 -->
+  <circle cx="25" cy="25" r="2" fill="#60a5fa"/>
+  <circle cx="25" cy="25" r="1" fill="white"/>
+  
+  <!-- Sparkle 2 -->
+  <circle cx="55" cy="30" r="2.5" fill="#60a5fa"/>
+  <circle cx="55" cy="30" r="1.2" fill="white"/>
+  
+  <!-- Sparkle 3 -->
+  <circle cx="48" cy="55" r="1.8" fill="#60a5fa"/>
+  <circle cx="48" cy="55" r="0.9" fill="white"/>
+  
+  <!-- Text xNAT -->
+  <text x="75" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#1e293b">
+    xNAT
+  </text>
+  
+  <!-- Text Car Wash -->
+  <text x="75" y="52" font-family="Arial, sans-serif" font-size="12" fill="#64748b" letter-spacing="1">
+    CAR WASH SERVICES
+  </text>
+</svg>
