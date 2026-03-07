@@ -33,37 +33,53 @@ app.get('/dashboards', (req, res) => {
 // Initialize database files
 async function initDB() {
     try {
-        await fs.access(DB_FILE);
-    } catch {
-        await fs.writeFile(DB_FILE, JSON.stringify([]));
-    }
-    
-    try {
-        await fs.access(USERS_FILE);
-    } catch {
-        // Create default admin user
-        const defaultUsers = [{
-            id: 1,
-            name: 'Admin',
-            email: 'admin@carwash.com',
-            phone: '1234567890',
-            password: 'admin123',
-            role: 'admin'
-        }];
-        await fs.writeFile(USERS_FILE, JSON.stringify(defaultUsers, null, 2));
-    }
-    
-    try {
-        await fs.access(PARTNERS_FILE);
-    } catch {
-        const defaultPartners = [
-            { id: 1, name: 'Pavi', profitShare: 50, expenses: 0, outstandingDue: 0, totalEarnings: 0, transactions: [] },
-            { id: 2, name: 'Kiruthi', profitShare: 12.5, expenses: 0, outstandingDue: 0, totalEarnings: 0, transactions: [] },
-            { id: 3, name: 'Siva', profitShare: 12.5, expenses: 0, outstandingDue: 0, totalEarnings: 0, transactions: [] },
-            { id: 4, name: 'Bharat', profitShare: 12.5, expenses: 0, outstandingDue: 0, totalEarnings: 0, transactions: [] },
-            { id: 5, name: 'Vasanth', profitShare: 12.5, expenses: 0, outstandingDue: 0, totalEarnings: 0, transactions: [] }
-        ];
-        await fs.writeFile(PARTNERS_FILE, JSON.stringify(defaultPartners, null, 2));
+        // Ensure data directory exists
+        const dataDir = path.join(__dirname, '../data');
+        try {
+            await fs.access(dataDir);
+        } catch {
+            await fs.mkdir(dataDir, { recursive: true });
+        }
+        
+        // Initialize bookings file
+        try {
+            await fs.access(DB_FILE);
+        } catch {
+            await fs.writeFile(DB_FILE, JSON.stringify([]));
+        }
+        
+        // Initialize users file
+        try {
+            await fs.access(USERS_FILE);
+        } catch {
+            // Create default admin user
+            const defaultUsers = [{
+                id: 1,
+                name: 'Admin',
+                email: 'admin@carwash.com',
+                phone: '1234567890',
+                password: 'admin123',
+                role: 'admin'
+            }];
+            await fs.writeFile(USERS_FILE, JSON.stringify(defaultUsers, null, 2));
+        }
+        
+        // Initialize partners file
+        try {
+            await fs.access(PARTNERS_FILE);
+        } catch {
+            const defaultPartners = [
+                { id: 1, name: 'Pavi', profitShare: 50, expenses: 0, outstandingDue: 0, totalEarnings: 0, transactions: [] },
+                { id: 2, name: 'Kiruthi', profitShare: 12.5, expenses: 0, outstandingDue: 0, totalEarnings: 0, transactions: [] },
+                { id: 3, name: 'Siva', profitShare: 12.5, expenses: 0, outstandingDue: 0, totalEarnings: 0, transactions: [] },
+                { id: 4, name: 'Bharat', profitShare: 12.5, expenses: 0, outstandingDue: 0, totalEarnings: 0, transactions: [] },
+                { id: 5, name: 'Vasanth', profitShare: 12.5, expenses: 0, outstandingDue: 0, totalEarnings: 0, transactions: [] }
+            ];
+            await fs.writeFile(PARTNERS_FILE, JSON.stringify(defaultPartners, null, 2));
+        }
+    } catch (error) {
+        console.error('Database initialization error:', error);
+        throw error;
     }
 }
 
@@ -363,9 +379,13 @@ app.post('/api/partners/distribute-profit', async (req, res) => {
 });
 
 initDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server running at http://localhost:${PORT}`);
-        console.log(`Login page: http://localhost:${PORT}/login`);
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Server running on port ${PORT}`);
+        console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+        console.log(`Login page: /login`);
         console.log(`Default admin: admin@carwash.com / admin123`);
     });
+}).catch(error => {
+    console.error('Failed to initialize database:', error);
+    process.exit(1);
 });
