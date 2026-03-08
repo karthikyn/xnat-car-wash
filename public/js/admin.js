@@ -52,7 +52,7 @@ function displayBookings(bookings) {
             <td>${booking.serviceType}</td>
             <td>${booking.date}</td>
             <td>${booking.time}</td>
-            <td>$${booking.price}</td>
+            <td>${booking.price}</td>
             <td><span class="status-badge status-${booking.status || 'pending'}">${booking.status || 'pending'}</span></td>
             <td>
                 <button onclick="openModal(${booking.id})" class="btn-update">Update</button>
@@ -245,7 +245,7 @@ function displayBookings(bookings) {
             <td>${booking.serviceType}</td>
             <td>${booking.date}</td>
             <td>${booking.time}</td>
-            <td>$${booking.price}</td>
+            <td>${booking.price}</td>
             <td><span class="status-badge status-${booking.status || 'pending'}">${booking.status || 'pending'}</span></td>
             <td>${booking.feedback ? `${booking.rating}⭐ - ${booking.feedback}` : 'No feedback'}</td>
             <td>
