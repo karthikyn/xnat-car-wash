@@ -125,29 +125,58 @@ function renderOverviewDashboard() {
 }
 
 function renderServiceDistribution() {
-    const distribution = {};
+    const serviceCount = {};
     allBookings.forEach(booking => {
-        const service = booking.serviceType.split(' - ')[0];
-        distribution[service] = (distribution[service] || 0) + 1;
+        serviceCount[booking.service] = (serviceCount[booking.service] || 0) + 1;
     });
-    
-    const chartHTML = Object.entries(distribution).map(([service, count]) => {
-        const percentage = (count / allBookings.length * 100).toFixed(1);
-        return `
-            <div style="margin-bottom: 15px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <span>${service}</span>
-                    <span><strong>${count}</strong> (${percentage}%)</span>
-                </div>
-                <div style="background: #e0e0e0; height: 8px; border-radius: 4px; overflow: hidden;">
-                    <div style="background: #1a237e; height: 100%; width: ${percentage}%;"></div>
-                </div>
-            </div>
-        `;
-    }).join('');
-    
-    document.getElementById('service-distribution-chart').innerHTML = chartHTML;
+
+    const ctx = document.getElementById('service-distribution-chart');
+    if (!ctx) return;
+
+    // Destroy existing chart if it exists
+    if (window.serviceDistChart) {
+        window.serviceDistChart.destroy();
+    }
+
+    window.serviceDistChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(serviceCount),
+            datasets: [{
+                data: Object.values(serviceCount),
+                backgroundColor: [
+                    '#1a237e',
+                    '#2e7d32',
+                    '#f57c00'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((context.parsed / total) * 100).toFixed(1);
+                            return `${context.label}: ${context.parsed} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
+
 
 function renderRevenueTrend() {
     const monthlyData = {};
@@ -158,41 +187,112 @@ function renderRevenueTrend() {
     });
     
     const sortedMonths = Object.keys(monthlyData).sort();
-    const maxRevenue = Math.max(...Object.values(monthlyData));
     
-    const chartHTML = sortedMonths.map(month => {
-        const revenue = monthlyData[month];
-        const height = (revenue / maxRevenue * 100);
-        return `
-            <div style="display: inline-block; width: ${100/sortedMonths.length}%; text-align: center; vertical-align: bottom;">
-                <div style="background: #1a237e; height: ${height*2}px; margin: 0 2px; border-radius: 4px 4px 0 0;"></div>
-                <div style="font-size: 10px; margin-top: 5px;">${month.substring(5)}</div>
-                <div style="font-size: 11px; font-weight: 600;">₹${(revenue/1000).toFixed(0)}K</div>
-            </div>
-        `;
-    }).join('');
+    const ctx = document.getElementById('revenue-trend-chart');
+    if (!ctx) return;
     
-    document.getElementById('revenue-trend-chart').innerHTML = `<div style="display: flex; align-items: flex-end; height: 250px;">${chartHTML}</div>`;
+    // Destroy existing chart if it exists
+    if (window.revenueTrendChart) {
+        window.revenueTrendChart.destroy();
+    }
+    
+    window.revenueTrendChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: sortedMonths.map(m => m.substring(5)),
+            datasets: [{
+                label: 'Revenue',
+                data: sortedMonths.map(m => monthlyData[m]),
+                borderColor: '#1a237e',
+                backgroundColor: 'rgba(26, 35, 126, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 5,
+                pointBackgroundColor: '#1a237e',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Revenue: ₹${context.parsed.y.toLocaleString()}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '₹' + (value/1000).toFixed(0) + 'K';
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
 
 function renderCenterPerformance() {
-    const chartHTML = serviceCenters.slice(0, 10).map(center => {
-        const maxRevenue = Math.max(...serviceCenters.map(c => c.revenue));
-        const width = (center.revenue / maxRevenue * 100);
-        return `
-            <div style="margin-bottom: 12px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px;">
-                    <span>${center.name}</span>
-                    <span><strong>₹${(center.revenue/1000).toFixed(0)}K</strong> | ${center.bookings} bookings</span>
-                </div>
-                <div style="background: #e0e0e0; height: 6px; border-radius: 3px; overflow: hidden;">
-                    <div style="background: linear-gradient(90deg, #1a237e, #3f51b5); height: 100%; width: ${width}%;"></div>
-                </div>
-            </div>
-        `;
-    }).join('');
+    const topCenters = serviceCenters.slice(0, 10);
     
-    document.getElementById('center-performance-chart').innerHTML = chartHTML;
+    const ctx = document.getElementById('center-performance-chart');
+    if (!ctx) return;
+    
+    // Destroy existing chart if it exists
+    if (window.centerPerfChart) {
+        window.centerPerfChart.destroy();
+    }
+    
+    window.centerPerfChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: topCenters.map(c => c.name.replace(' Center', '')),
+            datasets: [{
+                label: 'Revenue',
+                data: topCenters.map(c => c.revenue),
+                backgroundColor: '#1a237e',
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            indexAxis: 'y',
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const center = topCenters[context.dataIndex];
+                            return [
+                                `Revenue: ₹${context.parsed.x.toLocaleString()}`,
+                                `Bookings: ${center.bookings}`,
+                                `Rating: ${center.avgRating.toFixed(1)}⭐`
+                            ];
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        callback: function(value) {
+                            return '₹' + (value/1000).toFixed(0) + 'K';
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
 
 // Feedback Dashboard
@@ -225,63 +325,96 @@ function renderRatingDistribution(feedbackBookings) {
         if (b.rating) distribution[b.rating]++;
     });
     
-    const total = feedbackBookings.length;
-    const chartHTML = [5, 4, 3, 2, 1].map(rating => {
-        const count = distribution[rating];
-        const percentage = total > 0 ? (count / total * 100).toFixed(1) : 0;
-        return `
-            <div style="margin-bottom: 12px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <span>${'⭐'.repeat(rating)}</span>
-                    <span><strong>${count}</strong> (${percentage}%)</span>
-                </div>
-                <div style="background: #e0e0e0; height: 8px; border-radius: 4px; overflow: hidden;">
-                    <div style="background: #ff9800; height: 100%; width: ${percentage}%;"></div>
-                </div>
-            </div>
-        `;
-    }).join('');
+    const ctx = document.getElementById('rating-distribution-chart');
+    if (!ctx) return;
     
-    document.getElementById('rating-distribution-chart').innerHTML = chartHTML;
+    // Destroy existing chart if it exists
+    if (window.ratingDistChart) {
+        window.ratingDistChart.destroy();
+    }
+    
+    window.ratingDistChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['5⭐', '4⭐', '3⭐', '2⭐', '1⭐'],
+            datasets: [{
+                label: 'Reviews',
+                data: [distribution[5], distribution[4], distribution[3], distribution[2], distribution[1]],
+                backgroundColor: ['#2e7d32', '#66bb6a', '#ffa726', '#ff7043', '#e53935'],
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const total = feedbackBookings.length;
+                            const percentage = total > 0 ? ((context.parsed.y / total) * 100).toFixed(1) : 0;
+                            return `${context.parsed.y} reviews (${percentage}%)`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1 }
+                }
+            }
+        }
+    });
 }
 
 function renderSentimentAnalysis(feedbackBookings) {
     const positive = feedbackBookings.filter(b => b.rating >= 4).length;
     const neutral = feedbackBookings.filter(b => b.rating === 3).length;
     const negative = feedbackBookings.filter(b => b.rating <= 2).length;
-    const total = feedbackBookings.length;
     
-    const chartHTML = `
-        <div style="text-align: center; padding: 20px 0;">
-            <div style="display: flex; height: 220px; align-items: flex-end; justify-content: space-around; margin-bottom: 10px;">
-                <div style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-                    <div style="background: #4caf50; width: 80px; height: ${total > 0 ? (positive/total*180) : 0}px; border-radius: 8px 8px 0 0; min-height: 20px;"></div>
-                </div>
-                <div style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-                    <div style="background: #ff9800; width: 80px; height: ${total > 0 ? (neutral/total*180) : 0}px; border-radius: 8px 8px 0 0; min-height: 20px;"></div>
-                </div>
-                <div style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-                    <div style="background: #f44336; width: 80px; height: ${total > 0 ? (negative/total*180) : 0}px; border-radius: 8px 8px 0 0; min-height: 20px;"></div>
-                </div>
-            </div>
-            <div style="display: flex; justify-content: space-around; margin-top: 15px;">
-                <div style="text-align: center; width: 80px;">
-                    <div style="font-weight: 600; font-size: 14px; margin-bottom: 5px;">Positive</div>
-                    <div style="font-size: 24px; font-weight: 700; color: #4caf50;">${positive}</div>
-                </div>
-                <div style="text-align: center; width: 80px;">
-                    <div style="font-weight: 600; font-size: 14px; margin-bottom: 5px;">Neutral</div>
-                    <div style="font-size: 24px; font-weight: 700; color: #ff9800;">${neutral}</div>
-                </div>
-                <div style="text-align: center; width: 80px;">
-                    <div style="font-weight: 600; font-size: 14px; margin-bottom: 5px;">Negative</div>
-                    <div style="font-size: 24px; font-weight: 700; color: #f44336;">${negative}</div>
-                </div>
-            </div>
-        </div>
-    `;
+    const ctx = document.getElementById('sentiment-chart');
+    if (!ctx) return;
     
-    document.getElementById('sentiment-chart').innerHTML = chartHTML;
+    // Destroy existing chart if it exists
+    if (window.sentimentChart) {
+        window.sentimentChart.destroy();
+    }
+    
+    window.sentimentChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Positive (4-5⭐)', 'Neutral (3⭐)', 'Negative (1-2⭐)'],
+            datasets: [{
+                data: [positive, neutral, negative],
+                backgroundColor: ['#2e7d32', '#ffa726', '#e53935'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const total = positive + neutral + negative;
+                            const percentage = total > 0 ? ((context.parsed / total) * 100).toFixed(1) : 0;
+                            return `${context.label}: ${context.parsed} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
 
 function renderFeedbackList(feedbackBookings) {
