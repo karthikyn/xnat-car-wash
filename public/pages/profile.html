@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - xNAT Car Wash Services</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+    <div class="profile-container">
+        <header class="profile-header">
+            <div class="logo-container">
+                <img src="/assets/images/logo.svg" alt="xNAT" style="height:40px;">
+                <h1>My Profile</h1>
+            </div>
+            <button onclick="window.location.href='/'" class="btn-back">← Back to Home</button>
+        </header>
+
+        <main class="profile-content">
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="avatar-section">
+                    <div class="avatar-display" id="avatarDisplay">
+                        <img id="currentAvatar" src="" alt="Profile Avatar">
+                    </div>
+                    <button onclick="openAvatarModal()" class="btn-change-avatar">Change Avatar</button>
+                </div>
+
+                <div class="profile-info">
+                    <h2 id="userName">Loading...</h2>
+                    <p class="user-email" id="userEmail"></p>
+                    <p class="user-phone" id="userPhone"></p>
+                    <p class="member-since">Member since <span id="memberSince"></span></p>
+                </div>
+
+                <button onclick="openEditModal()" class="btn-edit-profile">Edit Profile</button>
+            </div>
+
+            <!-- Vehicles Section -->
+            <div class="vehicles-section">
+                <div class="section-header">
+                    <h2>My Vehicles</h2>
+                    <button onclick="openAddVehicleModal()" class="btn-add-vehicle">+ Add Vehicle</button>
+                </div>
+
+                <div class="vehicles-grid" id="vehiclesGrid">
+                    <div class="loading">Loading vehicles...</div>
+                </div>
+            </div>
+
+            <!-- Booking Stats -->
+            <div class="stats-section">
+                <h2>My Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-value" id="totalBookings">0</div>
+                        <div class="stat-label">Total Bookings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-value" id="completedBookings">0</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-value" id="totalSpent">₹0</div>
+                        <div class="stat-label">Total Spent</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-value" id="avgRating">0.0</div>
+                        <div class="stat-label">Avg Rating</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Avatar Selection Modal -->
+    <div id="avatarModal" class="modal hidden">
+        <div class="modal-content avatar-modal">
+            <h2>Choose Your Ghibli Avatar</h2>
+            <div class="avatar-grid" id="avatarGrid"></div>
+            <div class="modal-actions">
+                <button onclick="closeAvatarModal()" class="btn-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Edit Profile</h2>
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" id="editName" placeholder="Your name">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="editEmail" placeholder="your.email@example.com">
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="tel" id="editPhone" placeholder="9876543210">
+            </div>
+            <div class="modal-actions">
+                <button onclick="closeEditModal()" class="btn-cancel">Cancel</button>
+                <button onclick="saveProfile()" class="btn-save">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Vehicle Modal -->
+    <div id="vehicleModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Add Vehicle</h2>
+            <div class="form-group">
+                <label>Vehicle Name/Nickname</label>
+                <input type="text" id="vehicleName" placeholder="e.g., My Swift">
+            </div>
+            <div class="form-group">
+                <label>Make & Model</label>
+                <input type="text" id="vehicleModel" placeholder="e.g., Maruti Swift">
+            </div>
+            <div class="form-group">
+                <label>Registration Number</label>
+                <input type="text" id="vehicleReg" placeholder="e.g., TN01AB1234">
+            </div>
+            <div class="form-group">
+                <label>Color</label>
+                <input type="text" id="vehicleColor" placeholder="e.g., Red">
+            </div>
+            <div class="form-group">
+                <label>Year</label>
+                <input type="number" id="vehicleYear" placeholder="e.g., 2020" min="1990" max="2026">
+            </div>
+            <div class="modal-actions">
+                <button onclick="closeVehicleModal()" class="btn-cancel">Cancel</button>
+                <button onclick="saveVehicle()" class="btn-save">Add Vehicle</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/profile.js"></script>
+</body>
+</html>

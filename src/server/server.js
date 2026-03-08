@@ -30,6 +30,10 @@ app.get('/dashboards', (req, res) => {
     res.sendFile(path.join(__dirname, '../../public/pages/dashboards.html'));
 });
 
+app.get('/profile', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../public/pages/profile.html'));
+});
+
 // Initialize database files
 async function initDB() {
     try {
