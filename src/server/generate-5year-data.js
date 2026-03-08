@@ -140,13 +140,16 @@ function calculateYearlyBookings(targetRevenue) {
     return Math.round(targetRevenue / avgRevenue);
 }
 
-// Generate bookings for 5 years with 30% CAGR
+// Generate bookings for 2 years with 30% CAGR - Limited to 5000 total
 function generateBookings(users) {
     const bookings = [];
     let bookingId = 1;
     
+    // Target: 5000 total bookings split across 2 years
+    // Year 1: 2000 bookings, Year 2: 3000 bookings (showing 50% growth)
+    const yearlyBookingCounts = [2000, 3000];
+    
     // Initial revenue: ₹3 Crores = ₹30,000,000
-    // Reduced to 2 years of data to keep file size manageable
     const initialRevenue = 30000000;
     const cagr = 0.30; // 30% growth
     
@@ -156,16 +159,15 @@ function generateBookings(users) {
         yearlyRevenues.push(initialRevenue * Math.pow(1 + cagr, year));
     }
     
-    console.log('Yearly Revenue Targets (2-year data for demo):');
+    console.log('Yearly Revenue Targets (5000 total bookings):');
     yearlyRevenues.forEach((rev, idx) => {
-        console.log(`Year ${2025 + idx}: ₹${(rev / 10000000).toFixed(2)} Cr`);
+        console.log(`Year ${2025 + idx}: ₹${(rev / 10000000).toFixed(2)} Cr (${yearlyBookingCounts[idx]} bookings)`);
     });
     
     // Generate bookings for each year
     for (let yearIdx = 0; yearIdx < 2; yearIdx++) {
         const year = 2025 + yearIdx;
-        const targetRevenue = yearlyRevenues[yearIdx];
-        const yearlyBookingCount = calculateYearlyBookings(targetRevenue);
+        const yearlyBookingCount = yearlyBookingCounts[yearIdx];
         
         console.log(`Generating ${yearlyBookingCount} bookings for year ${year}...`);
         
@@ -276,13 +278,13 @@ function generateBookings(users) {
 
 // Main function
 async function generateData() {
-    console.log('Starting 2-year data generation (2025-2026)...\n');
-    console.log('Note: Generating 2 years of data to keep file size manageable for GitHub');
+    console.log('Starting optimized data generation (5000 bookings)...\n');
+    console.log('Note: Limited to 5000 bookings for fast loading');
     console.log('Revenue growth: ₹3 Cr (2025) → ₹3.9 Cr (2026) with 30% CAGR\n');
     
-    // Generate users (300 unique customers)
-    console.log('Generating 300 users...');
-    const users = generateUsers(300);
+    // Generate users (200 unique customers - reduced for faster loading)
+    console.log('Generating 200 users...');
+    const users = generateUsers(200);
     
     // Generate bookings
     console.log('\nGenerating bookings with revenue targets...');
