@@ -655,31 +655,62 @@ function renderRevenueProfitChart() {
     });
     
     const sortedMonths = Object.keys(monthlyData).sort().slice(-6);
-    const maxValue = Math.max(...sortedMonths.map(m => monthlyData[m].revenue));
     
-    const chartHTML = sortedMonths.map(month => {
-        const data = monthlyData[month];
-        const revenueHeight = (data.revenue / maxValue * 200);
-        const profitHeight = (data.profit / maxValue * 200);
-        
-        return `
-            <div style="display: inline-block; width: ${100/sortedMonths.length}%; text-align: center; vertical-align: bottom;">
-                <div style="display: flex; justify-content: center; align-items: flex-end; height: 220px; gap: 5px;">
-                    <div style="background: #4caf50; width: 40%; height: ${revenueHeight}px; border-radius: 4px 4px 0 0;"></div>
-                    <div style="background: #2196f3; width: 40%; height: ${profitHeight}px; border-radius: 4px 4px 0 0;"></div>
-                </div>
-                <div style="font-size: 11px; margin-top: 8px;">${month.substring(5)}/26</div>
-            </div>
-        `;
-    }).join('');
+    const ctx = document.getElementById('revenue-profit-chart');
+    if (!ctx) return;
     
-    document.getElementById('revenue-profit-chart').innerHTML = `
-        <div style="margin-bottom: 15px; display: flex; justify-content: center; gap: 20px; font-size: 13px;">
-            <div><span style="display: inline-block; width: 12px; height: 12px; background: #4caf50; border-radius: 2px;"></span> Revenue</div>
-            <div><span style="display: inline-block; width: 12px; height: 12px; background: #2196f3; border-radius: 2px;"></span> Gross Profit</div>
-        </div>
-        <div style="display: flex; align-items: flex-end;">${chartHTML}</div>
-    `;
+    // Destroy existing chart if it exists
+    if (window.revenueProfitChart) {
+        window.revenueProfitChart.destroy();
+    }
+    
+    window.revenueProfitChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: sortedMonths.map(m => m.substring(5) + '/26'),
+            datasets: [{
+                label: 'Revenue',
+                data: sortedMonths.map(m => monthlyData[m].revenue),
+                backgroundColor: '#2e7d32',
+                borderRadius: 6
+            }, {
+                label: 'Gross Profit',
+                data: sortedMonths.map(m => monthlyData[m].profit),
+                backgroundColor: '#1a237e',
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        padding: 15,
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ₹${context.parsed.y.toLocaleString()}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '₹' + (value/1000).toFixed(0) + 'K';
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
 
 function renderCostBreakdown() {
@@ -687,39 +718,49 @@ function renderCostBreakdown() {
     const directCosts = calculateDirectCosts();
     const operatingExpenses = totalRevenue * 0.294; // 29.4% from financial analysis
     const taxes = calculateNetProfit() * 0.25;
+    const netProfit = calculateNetProfit();
     
-    const costs = [
-        { label: 'Direct Costs', value: directCosts, color: '#f44336' },
-        { label: 'Operating Expenses', value: operatingExpenses, color: '#ff9800' },
-        { label: 'Taxes', value: taxes, color: '#9c27b0' },
-        { label: 'Net Profit', value: calculateNetProfit(), color: '#4caf50' }
-    ];
+    const ctx = document.getElementById('cost-breakdown-chart');
+    if (!ctx) return;
     
-    const total = costs.reduce((sum, c) => sum + c.value, 0);
+    // Destroy existing chart if it exists
+    if (window.costBreakdownChart) {
+        window.costBreakdownChart.destroy();
+    }
     
-    const chartHTML = `
-        <div style="text-align: center;">
-            ${costs.map(cost => {
-                const percentage = (cost.value / total * 100).toFixed(1);
-                return `
-                    <div style="margin-bottom: 15px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <div style="width: 16px; height: 16px; background: ${cost.color}; border-radius: 3px;"></div>
-                                <span>${cost.label}</span>
-                            </div>
-                            <span style="font-weight: 600;">₹${(cost.value/1000).toFixed(0)}K (${percentage}%)</span>
-                        </div>
-                        <div style="background: #e0e0e0; height: 12px; border-radius: 6px; overflow: hidden;">
-                            <div style="background: ${cost.color}; height: 100%; width: ${percentage}%;"></div>
-                        </div>
-                    </div>
-                `;
-            }).join('')}
-        </div>
-    `;
-    
-    document.getElementById('cost-breakdown-chart').innerHTML = chartHTML;
+    window.costBreakdownChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Direct Costs', 'Operating Expenses', 'Taxes', 'Net Profit'],
+            datasets: [{
+                data: [directCosts, operatingExpenses, taxes, netProfit],
+                backgroundColor: ['#e53935', '#ffa726', '#ab47bc', '#2e7d32'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const total = directCosts + operatingExpenses + taxes + netProfit;
+                            const percentage = ((context.parsed / total) * 100).toFixed(1);
+                            return `${context.label}: ₹${(context.parsed/1000).toFixed(0)}K (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
 
 function renderFinancialTable() {
@@ -804,22 +845,54 @@ function renderUserGrowthChart() {
     });
     
     const sortedMonths = Object.keys(monthlyUsers).sort();
-    const maxUsers = Math.max(...sortedMonths.map(m => monthlyUsers[m].size));
     
-    const chartHTML = sortedMonths.map(month => {
-        const count = monthlyUsers[month].size;
-        const height = (count / maxUsers * 200);
-        
-        return `
-            <div style="display: inline-block; width: ${100/sortedMonths.length}%; text-align: center; vertical-align: bottom;">
-                <div style="background: linear-gradient(180deg, #2196f3, #1976d2); height: ${height}px; margin: 0 2px; border-radius: 4px 4px 0 0;"></div>
-                <div style="font-size: 10px; margin-top: 5px;">${month.substring(5)}</div>
-                <div style="font-size: 12px; font-weight: 600;">${count}</div>
-            </div>
-        `;
-    }).join('');
+    const ctx = document.getElementById('user-growth-chart');
+    if (!ctx) return;
     
-    document.getElementById('user-growth-chart').innerHTML = `<div style="display: flex; align-items: flex-end; height: 250px;">${chartHTML}</div>`;
+    // Destroy existing chart if it exists
+    if (window.userGrowthChart) {
+        window.userGrowthChart.destroy();
+    }
+    
+    window.userGrowthChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: sortedMonths.map(m => m.substring(5)),
+            datasets: [{
+                label: 'Active Users',
+                data: sortedMonths.map(m => monthlyUsers[m].size),
+                borderColor: '#1a237e',
+                backgroundColor: 'rgba(26, 35, 126, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 5,
+                pointBackgroundColor: '#1a237e',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Active Users: ${context.parsed.y}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1 }
+                }
+            }
+        }
+    });
 }
 
 function renderCustomerSegments() {
@@ -832,25 +905,47 @@ function renderCustomerSegments() {
         'One-time': users.filter(u => u.bookings === 1).length
     };
     
-    const total = users.length;
-    const colors = ['#4caf50', '#2196f3', '#ff9800', '#9e9e9e'];
+    const ctx = document.getElementById('customer-segments-chart');
+    if (!ctx) return;
     
-    const chartHTML = Object.entries(segments).map(([segment, count], index) => {
-        const percentage = (count / total * 100).toFixed(1);
-        return `
-            <div style="margin-bottom: 15px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <span>${segment}</span>
-                    <span><strong>${count}</strong> (${percentage}%)</span>
-                </div>
-                <div style="background: #e0e0e0; height: 10px; border-radius: 5px; overflow: hidden;">
-                    <div style="background: ${colors[index]}; height: 100%; width: ${percentage}%;"></div>
-                </div>
-            </div>
-        `;
-    }).join('');
+    // Destroy existing chart if it exists
+    if (window.customerSegmentsChart) {
+        window.customerSegmentsChart.destroy();
+    }
     
-    document.getElementById('customer-segments-chart').innerHTML = chartHTML;
+    window.customerSegmentsChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(segments),
+            datasets: [{
+                data: Object.values(segments),
+                backgroundColor: ['#2e7d32', '#1a237e', '#ffa726', '#9e9e9e'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const total = users.length;
+                            const percentage = ((context.parsed / total) * 100).toFixed(1);
+                            return `${context.label}: ${context.parsed} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
 
 function renderTopCustomers(users) {
