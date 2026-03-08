@@ -138,6 +138,8 @@ function renderServiceDistribution() {
         window.serviceDistChart.destroy();
     }
 
+    const total = Object.values(serviceCount).reduce((a, b) => a + b, 0);
+
     window.serviceDistChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -166,14 +168,25 @@ function renderServiceDistribution() {
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
                             const percentage = ((context.parsed / total) * 100).toFixed(1);
                             return `${context.label}: ${context.parsed} (${percentage}%)`;
                         }
                     }
+                },
+                datalabels: {
+                    color: '#fff',
+                    font: {
+                        weight: 'bold',
+                        size: 14
+                    },
+                    formatter: function(value) {
+                        const percentage = ((value / total) * 100).toFixed(1);
+                        return percentage + '%\n(' + value + ')';
+                    }
                 }
             }
-        }
+        },
+        plugins: [ChartDataLabels]
     });
 }
 
@@ -373,6 +386,7 @@ function renderSentimentAnalysis(feedbackBookings) {
     const positive = feedbackBookings.filter(b => b.rating >= 4).length;
     const neutral = feedbackBookings.filter(b => b.rating === 3).length;
     const negative = feedbackBookings.filter(b => b.rating <= 2).length;
+    const total = positive + neutral + negative;
     
     const ctx = document.getElementById('sentiment-chart');
     if (!ctx) return;
@@ -406,14 +420,26 @@ function renderSentimentAnalysis(feedbackBookings) {
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            const total = positive + neutral + negative;
                             const percentage = total > 0 ? ((context.parsed / total) * 100).toFixed(1) : 0;
                             return `${context.label}: ${context.parsed} (${percentage}%)`;
                         }
                     }
+                },
+                datalabels: {
+                    color: '#fff',
+                    font: {
+                        weight: 'bold',
+                        size: 14
+                    },
+                    formatter: function(value) {
+                        if (total === 0) return '';
+                        const percentage = ((value / total) * 100).toFixed(1);
+                        return percentage + '%\n(' + value + ')';
+                    }
                 }
             }
-        }
+        },
+        plugins: [ChartDataLabels]
     });
 }
 
@@ -719,6 +745,7 @@ function renderCostBreakdown() {
     const operatingExpenses = totalRevenue * 0.294; // 29.4% from financial analysis
     const taxes = calculateNetProfit() * 0.25;
     const netProfit = calculateNetProfit();
+    const total = directCosts + operatingExpenses + taxes + netProfit;
     
     const ctx = document.getElementById('cost-breakdown-chart');
     if (!ctx) return;
@@ -752,14 +779,25 @@ function renderCostBreakdown() {
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            const total = directCosts + operatingExpenses + taxes + netProfit;
                             const percentage = ((context.parsed / total) * 100).toFixed(1);
                             return `${context.label}: ₹${(context.parsed/1000).toFixed(0)}K (${percentage}%)`;
                         }
                     }
+                },
+                datalabels: {
+                    color: '#fff',
+                    font: {
+                        weight: 'bold',
+                        size: 13
+                    },
+                    formatter: function(value) {
+                        const percentage = ((value / total) * 100).toFixed(1);
+                        return percentage + '%';
+                    }
                 }
             }
-        }
+        },
+        plugins: [ChartDataLabels]
     });
 }
 
@@ -905,6 +943,8 @@ function renderCustomerSegments() {
         'One-time': users.filter(u => u.bookings === 1).length
     };
     
+    const total = users.length;
+    
     const ctx = document.getElementById('customer-segments-chart');
     if (!ctx) return;
     
@@ -937,14 +977,25 @@ function renderCustomerSegments() {
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            const total = users.length;
                             const percentage = ((context.parsed / total) * 100).toFixed(1);
                             return `${context.label}: ${context.parsed} (${percentage}%)`;
                         }
                     }
+                },
+                datalabels: {
+                    color: '#fff',
+                    font: {
+                        weight: 'bold',
+                        size: 13
+                    },
+                    formatter: function(value) {
+                        const percentage = ((value / total) * 100).toFixed(1);
+                        return percentage + '%';
+                    }
                 }
             }
-        }
+        },
+        plugins: [ChartDataLabels]
     });
 }
 
@@ -995,22 +1046,47 @@ function renderPeakHoursChart() {
     });
     
     const hours = Object.keys(hourlyData).sort();
-    const maxBookings = Math.max(...Object.values(hourlyData));
     
-    const chartHTML = hours.map(hour => {
-        const count = hourlyData[hour];
-        const height = (count / maxBookings * 200);
-        
-        return `
-            <div style="display: inline-block; width: ${100/hours.length}%; text-align: center; vertical-align: bottom;">
-                <div style="background: #9c27b0; height: ${height}px; margin: 0 2px; border-radius: 4px 4px 0 0;"></div>
-                <div style="font-size: 10px; margin-top: 5px;">${hour}:00</div>
-                <div style="font-size: 11px; font-weight: 600;">${count}</div>
-            </div>
-        `;
-    }).join('');
+    const ctx = document.getElementById('peak-hours-chart');
+    if (!ctx) return;
     
-    document.getElementById('peak-hours-chart').innerHTML = `<div style="display: flex; align-items: flex-end; height: 250px;">${chartHTML}</div>`;
+    // Destroy existing chart if it exists
+    if (window.peakHoursChart) {
+        window.peakHoursChart.destroy();
+    }
+    
+    window.peakHoursChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: hours.map(h => h + ':00'),
+            datasets: [{
+                label: 'Bookings',
+                data: hours.map(h => hourlyData[h]),
+                backgroundColor: '#ab47bc',
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Bookings: ${context.parsed.y}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1 }
+                }
+            }
+        }
+    });
 }
 
 function renderServiceTrends() {
@@ -1027,36 +1103,65 @@ function renderServiceTrends() {
     });
     
     const sortedMonths = Object.keys(monthlyServices).sort().slice(-6);
-    const services = ['Basic Wash', 'Premium Wash', 'Deluxe Detail'];
-    const colors = ['#2196f3', '#ff9800', '#4caf50'];
     
-    const chartHTML = `
-        <div style="margin-bottom: 15px; display: flex; justify-content: center; gap: 20px; font-size: 13px;">
-            ${services.map((service, i) => `
-                <div><span style="display: inline-block; width: 12px; height: 12px; background: ${colors[i]}; border-radius: 2px;"></span> ${service}</div>
-            `).join('')}
-        </div>
-        <div style="display: flex; justify-content: space-around; align-items: flex-end; height: 220px;">
-            ${sortedMonths.map(month => {
-                const data = monthlyServices[month];
-                const total = Object.values(data).reduce((sum, v) => sum + v, 0);
-                
-                return `
-                    <div style="text-align: center; width: ${100/sortedMonths.length}%;">
-                        <div style="display: flex; flex-direction: column-reverse; align-items: center; height: 200px;">
-                            ${services.map((service, i) => {
-                                const height = (data[service] / total * 180);
-                                return `<div style="background: ${colors[i]}; width: 60%; height: ${height}px;"></div>`;
-                            }).join('')}
-                        </div>
-                        <div style="font-size: 11px; margin-top: 8px;">${month.substring(5)}/26</div>
-                    </div>
-                `;
-            }).join('')}
-        </div>
-    `;
+    const ctx = document.getElementById('service-trends-chart');
+    if (!ctx) return;
     
-    document.getElementById('service-trends-chart').innerHTML = chartHTML;
+    // Destroy existing chart if it exists
+    if (window.serviceTrendsChart) {
+        window.serviceTrendsChart.destroy();
+    }
+    
+    window.serviceTrendsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: sortedMonths.map(m => m.substring(5) + '/26'),
+            datasets: [{
+                label: 'Basic Wash',
+                data: sortedMonths.map(m => monthlyServices[m]['Basic Wash']),
+                borderColor: '#1a237e',
+                backgroundColor: 'rgba(26, 35, 126, 0.1)',
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 4
+            }, {
+                label: 'Premium Wash',
+                data: sortedMonths.map(m => monthlyServices[m]['Premium Wash']),
+                borderColor: '#ffa726',
+                backgroundColor: 'rgba(255, 167, 38, 0.1)',
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 4
+            }, {
+                label: 'Deluxe Detail',
+                data: sortedMonths.map(m => monthlyServices[m]['Deluxe Detail']),
+                borderColor: '#2e7d32',
+                backgroundColor: 'rgba(46, 125, 50, 0.1)',
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        padding: 15,
+                        font: { size: 12 }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1 }
+                }
+            }
+        }
+    });
 }
 
 function renderAIInsights() {
